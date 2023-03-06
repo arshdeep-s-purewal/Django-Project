@@ -1,0 +1,20 @@
+<!-- <div id = "output">
+    <form method = "GET"  >
+        {%csrf_token%}
+        {{form}}
+        <input type = "text" id="num1" name = "num1" value="" />
+        <input type = "text" id="num2" name = "num2" value=""/>
+        <input type = "submit" name="add" value="+" />
+        <input type = "submit" name="sub" value="-" />
+        <input type = "submit" name="mul" value="*" />
+        <input type = "submit" name="div" value="/" /> 
+    </form>
+</div>
+<!-- {{result}} -->
+<!-- <h1>Output:- {{result}}</h1> --> 
+
+<form action="" method="post">
+    {%csrf_token%}
+    {{form.as_div}}
+    <input type="submit" name = 'submit'>
+</form>

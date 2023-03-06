@@ -6,6 +6,7 @@ class Blog(models.Model):
     author = models.CharField(max_length=100)
     description = models.TextField()
     is_published = models.BooleanField(default=False)
+    date_of_release = models.DateTimeField()
 
     def __str__(self):
         return self.title
