@@ -1,0 +1,13 @@
+<div>
+    {%if error_message %}
+    <p style="color:red">{{error_message}}</p>
+    {% endif %}
+    {%for blog in blogs %}
+        <h2>{{blog.title}}</h2>
+        <p>{{blog.author}}<p>
+        <a href = "">Edit</a> | <a href="/blogs/{{blog.pk}}/delete/">Delete</a>
+        <hr>
+        {%empty%}
+        <p style = "color:orange;">Blogs table is empty.</p> <a href="/blogs/create">Create Blog</a>
+    {%endfor%}
+</div>
