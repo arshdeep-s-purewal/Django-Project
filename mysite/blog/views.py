@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse,Http404
 from blog.forms import BlogForm
 from blog.models import Blog
@@ -54,7 +54,7 @@ def create_blog(request):
             blog = form.save()
             blog.is_published = True
             form.save()
-
+            return redirect('/blogs/list')
     return render(request, 'create.html',{'form':form})
 
 
@@ -65,11 +65,25 @@ def list_blogs(request):
 
 def delete_blog(request, **kwargs):
     error_message = ""
+    # import pdb; pdb.set_trace()
+    if pk := kwargs.get('pk'):
+        try:
+            blog = Blog.objects.get(pk=pk)  #(database pk, request pk) and blog here is primary key
+            blog.delete()
+        except Exception as e:
+            error_message = "Blog does not exist."
+    blogs = Blog.objects.all()
+    return render(request, 'list.html',{'blogs':blogs})
+
+def update_blog(request, **kwargs):
+    error_message = ""
     if pk := kwargs.get('pk'):
         try:
             blog = Blog.objects.get(pk=pk)
-            blog.delete()
+            form = BlogForm(request.POST or None, instance=blog)
+            form.save()
+            return redirect('/blogs/list')
         except Exception as e:
-            error_message = "Blog does not exist"
-    blogs = Blog.objects.all()
-    return render(request, 'list.html',{'blogs':blogs})
+            error_message = "Blog does not exist."
+    
+    return render(request, 'create.html',{'form':form})

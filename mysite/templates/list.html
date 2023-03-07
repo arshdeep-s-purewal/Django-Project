@@ -5,7 +5,7 @@
     {%for blog in blogs %}
         <h2>{{blog.title}}</h2>
         <p>{{blog.author}}<p>
-        <a href = "">Edit</a> | <a href="/blogs/{{blog.pk}}/delete/">Delete</a>
+        <a href = "/blogs/{{blog.pk}}/edit/">Edit</a> | <a href="/blogs/{{blog.pk}}/delete/">Delete</a>
         <hr>
         {%empty%}
         <p style = "color:orange;">Blogs table is empty.</p> <a href="/blogs/create">Create Blog</a>
