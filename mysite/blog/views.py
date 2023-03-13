@@ -48,6 +48,7 @@ def index(request):
 def create_blog(request):
     form = BlogForm()
     # import pdb;pdb.set_trace()
+    # breakpoint()
     if request.method == 'POST':
         form = BlogForm(request.POST)
         if form.is_valid():
@@ -65,7 +66,7 @@ def list_blogs(request):
 
 def delete_blog(request, **kwargs):
     error_message = ""
-    # import pdb; pdb.set_trace()
+    import pdb; pdb.set_trace()
     if pk := kwargs.get('pk'):
         try:
             blog = Blog.objects.get(pk=pk)  #(database pk, request pk) and blog here is primary key
