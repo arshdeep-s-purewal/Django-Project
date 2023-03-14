@@ -27,7 +27,7 @@ urlpatterns = [
     path('blogs/<int:pk>/edit/', update_blog),
     path('apna_bazaar/add_product/', add_product),
     path('apna_bazaar/show_products', show_products),
-    path('apna_bazaar/detail_of_products', show_product_detail),
-    path('apna_bazaar/add_to_cart', add_to_cart),
+    path('apna_bazaar/<int:pk>/detail_of_products', show_product_detail),
+    path('apna_bazaar/<int:pk>/add_to_cart', add_to_cart),
     
 ]

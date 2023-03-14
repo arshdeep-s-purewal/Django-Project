@@ -15,9 +15,40 @@ def show_products(request):
     products = ApnaBazaar.objects.all()
     return render(request, 'products.html', {'Products':products})
 
-def show_product_detail(request):
-    products = ApnaBazaar.objects.all()
-    return render(request, 'product_detail.html', {'Products':products})
+def show_product_detail(request, **kwargs):
+    # import pdb;pdb.set_trace()
+    context={}
+    if pk := kwargs.get('pk'):
+        # import pdb;pdb.set_trace()
+        # request.session['name'] = 'Arsh'
+        name = request.session.get('name')
+        product = ApnaBazaar.objects.get(pk = pk)
+    context = {'Product':product, 'name':name}
+    return render(request, 'product_detail.html', context)
 
-def add_to_cart():
-    pass
+
+
+# def add_to_cart(request, **kwargs):
+#     context={}
+#     import pdb;pdb.set_trace()
+#     # if request.session['cart'] ==  []:
+#     if pk := kwargs.get('pk'):
+#         product = ApnaBazaar.objects.get(pk = pk)
+#         # request.session['cart'] = []
+#         item = {'name_of_product':product.Name, 'Price':product.Price}
+#         request.session['cart'].append(item)
+#         name = request.session['cart'] 
+#     context = {'name':name}
+#     return render(request, 'cart.html', context)
+
+def add_to_cart(request, **kwargs):
+    # context={}
+    # import pdb;pdb.set_trace()
+    if pk := kwargs.get('pk'):
+        product = ApnaBazaar.objects.get(pk = pk)
+        cart = request.session.get('cart',[])
+        item = {'name_of_product':product.Name, 'Price':product.Price}
+        cart.append(item)
+        request.session['cart'] = cart
+        name = request.session['cart']
+        return render(request,'cart.html', {'name':name})

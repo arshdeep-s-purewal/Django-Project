@@ -1,10 +1,11 @@
 <div>
-    {% for i in Products %}
-        <h2>{{i.Name}}</h2>
-        <h2>Price:{{i.Price}}</h2>
-        <h2>Quantity:{{i.Quantity}}</h2>
-        <br>
-        <a href='/apna_bazaar/add_to_cart'>Add to cart</details></a>
-        <hr>
-    {% endfor %}
+    {{name}}
+    <h2>{{Product.Name}}</h2>
+    <h2>Price:{{Product.Price}}</h2>
+    <h2>Quantity:{{Product.Quantity}}</h2>
+    <br>
+
+    <a href='/apna_bazaar/{{Product.id}}/add_to_cart'>Add to cart</details></a>
+    <hr>
+
 </div>
