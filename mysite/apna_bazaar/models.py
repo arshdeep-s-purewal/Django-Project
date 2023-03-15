@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 class ApnaBazaar(models.Model):
-    Name = models.CharField(max_length=150)
-    Price = models.CharField(max_length=150)
-    Quantity = models.CharField(max_length=150)
+    name = models.CharField(max_length=150)
+    price = models.CharField(max_length=150)
+    quantity = models.CharField(max_length=150)
     

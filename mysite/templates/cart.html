@@ -1,3 +1,8 @@
 <div>
-    {{name}}
+    {% for item in request.session.cart %}
+        {{item.name_of_product}} <br>
+        {{item.Price}} <br>
+        <a href="/apna_bazaar/{{item.Id}}/remove_from_cart">Remove</a>
+        <hr>
+    {% endfor %}
 </div>

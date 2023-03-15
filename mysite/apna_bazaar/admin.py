@@ -3,6 +3,6 @@ from .models import ApnaBazaar
 
 # Register your models here.
 class ApnaBazaarAdmin(admin.ModelAdmin):
-    list_display = ["Name", "Price", "Quantity"]
+    list_display = ["name", "price", "quantity"]
 
 admin.site.register(ApnaBazaar, ApnaBazaarAdmin)

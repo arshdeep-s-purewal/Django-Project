@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
 from blog.views import create_blog, index, list_blogs, delete_blog, update_blog
-from apna_bazaar.views import add_product,show_products, show_product_detail, add_to_cart
+from apna_bazaar.views import add_product,show_products, show_product_detail, add_to_cart,remove_from_cart
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('index/',csrf_exempt(index),name='index'),
@@ -29,5 +29,6 @@ urlpatterns = [
     path('apna_bazaar/show_products', show_products),
     path('apna_bazaar/<int:pk>/detail_of_products', show_product_detail),
     path('apna_bazaar/<int:pk>/add_to_cart', add_to_cart),
+    path('apna_bazaar/<int:pk>/remove_from_cart', remove_from_cart),
     
 ]
