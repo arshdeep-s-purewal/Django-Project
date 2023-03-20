@@ -11,7 +11,7 @@ def add_item_to_cart(request, **kwargs):
     return request.session['cart']
 
 def remove_item_from_cart(request, **kwargs):
-    import pdb;pdb.set_trace()
+    # import pdb;pdb.set_trace()
     if pk := kwargs.get('pk'):
         product = ApnaBazaar.objects.get(pk = pk)
         for i in request.session['cart']:

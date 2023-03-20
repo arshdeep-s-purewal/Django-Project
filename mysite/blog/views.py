@@ -1,54 +1,17 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse,Http404
-from blog.forms import BlogForm
+from blog.forms import BlogForm, CreateNewUserForm
 from blog.models import Blog
+from django.contrib.auth.models import User
+from django.contrib import messages
+from .forms import NewUserForm
+from django.contrib.auth import login,authenticate,logout
 
-# Create your views here.
-# def addition(num1,num2):
-#     res = int(num1)+int(num2)
-#     return res
-
-# def subtract(num1,num2):
-#     res = int(num1)-int(num2)
-#     return res
-
-# def multiply(num1,num2):
-#     res = int(num1)*int(num2)
-#     return res
-
-# def divide(num1,num2):
-#     res = int(num1)/int(num2)
-#     return res
-
-
-
-def index(request):
-    return HttpResponse("Index page of project file.")
-    # num1 = request.GET.get('num1','')
-    # num2 = request.GET.get('num2','')
-    # result = " "
-    
-    # if  request.method  == "GET":
-        
-    #     print(request.GET)
-    #     if 'add' in request.GET:
-    #         result = addition(num1,num2)
-    #     if 'sub' in request.GET:
-    #         result = subtract(num1,num2)
-    #     if 'mul' in request.GET:
-    #         result = multiply(num1,num2)
-    #     if 'div' in request.GET:
-    #         result = divide(num1,num2)
-       
-    # return render(request, 'name.html', {'result':result})
-
-    # form = RegistrationForm
-   
+def index_page(request):
+     return render(request, 'index.html')
    
 def create_blog(request):
     form = BlogForm()
-    # import pdb;pdb.set_trace()
-    # breakpoint()
     if request.method == 'POST':
         form = BlogForm(request.POST)
         if form.is_valid():
@@ -66,7 +29,6 @@ def list_blogs(request):
 
 def delete_blog(request, **kwargs):
     error_message = ""
-    import pdb; pdb.set_trace()
     if pk := kwargs.get('pk'):
         try:
             blog = Blog.objects.get(pk=pk)  #(database pk, request pk) and blog here is primary key
@@ -88,3 +50,30 @@ def update_blog(request, **kwargs):
             error_message = "Blog does not exist."
     
     return render(request, 'create.html',{'form':form})
+
+
+def create_new_user(request):
+    # import pdb;pdb.set_trace()
+    form = CreateNewUserForm()
+    if request.method == 'POST':
+        form = CreateNewUserForm(request.POST)
+        # print(request.user)
+        username = request.POST.get('username', None)
+        password = request.POST.get('password', None)
+        email = request.POST.get('email')
+        user = User.objects.create_user(username, password=password, email=email)
+        user.save()
+    
+    return render(request,'register.html', {'form':form})
+
+def login_user(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request,username=username,password=password)
+        print('======================>')
+        print(user)
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+    return render(request,'login.html',{})

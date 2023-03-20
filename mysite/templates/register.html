@@ -1,0 +1,25 @@
+{% extends 'index.html'%}
+{% block content %} 
+   
+
+<!--Register--> 
+<div class="container py-5">
+	<h1>Register</h1>
+	<form method="POST">
+		{% csrf_token %}
+		
+		<label for="name">Enter Username</label> 
+		<p>{{form.username}}</p>
+		<br>
+		<label for="name">Enter Email</label> 
+		<p>{{form.email}}</p>
+		<br>
+		<label for="name">Enter password</label> 
+		<p>{{form.password}}</p>
+		<br>                 
+		<button class="btn btn-primary" type="submit">Register</button>
+	</form>
+	<p class="text-center">If you already have an account, <a href="/login">login</a> instead.</p>
+</div>
+
+{% endblock %}
