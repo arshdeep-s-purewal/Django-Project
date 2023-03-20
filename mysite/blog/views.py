@@ -6,10 +6,13 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from .forms import NewUserForm
 from django.contrib.auth import login,authenticate,logout
+from django.contrib.auth.decorators import login_required, permission_required
+
 
 def index_page(request):
      return render(request, 'index.html')
    
+@permission_required('blog.add_blog',raise_exception=True)
 def create_blog(request):
     form = BlogForm()
     if request.method == 'POST':
@@ -75,5 +78,9 @@ def login_user(request):
         print(user)
         if user is not None:
             login(request, user)
-            return redirect('home')
+            return redirect('index')
     return render(request,'login.html',{})
+
+def logout_user(request):
+    logout(request)
+    return redirect("index")

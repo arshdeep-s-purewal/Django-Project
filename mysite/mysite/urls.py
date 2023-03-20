@@ -16,10 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
-from blog.views import create_blog, list_blogs, delete_blog, update_blog, create_new_user, index_page, login
+from blog.views import create_blog, list_blogs, delete_blog, update_blog, create_new_user, index_page, login_user,logout_user
 from apna_bazaar.views import add_product,show_products, show_product_detail, add_to_cart,remove_from_cart
 urlpatterns = [
-    path('', index_page),
+    path('', index_page,name='index'),
     path('admin/', admin.site.urls),
     path('blogs/create',csrf_exempt(create_blog),name='create_blog'),
     path('blogs/list', list_blogs, name='list_blogs'),
@@ -32,5 +32,6 @@ urlpatterns = [
     path('apna_bazaar/<int:pk>/add_to_cart', add_to_cart),
     path('apna_bazaar/<int:pk>/remove_from_cart', remove_from_cart),
     path('blogs/create_new_user', create_new_user,name='create_new_user'),
-    path('blogs/login', login, name="login"),
+    path('blogs/login', login_user, name="login"),
+    path('blogs/logout', logout_user, name="logout"),
 ]
