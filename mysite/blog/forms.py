@@ -2,10 +2,6 @@ from django import forms
 from .models import Blog
 from django.contrib.auth.models import User
 
-# class RegistrationForm(forms.Form):
-#             num1 = forms.CharField()
-#             num2 = forms.CharField()
-
 class BlogForm(forms.ModelForm):
         class Meta:
             model = Blog
