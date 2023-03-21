@@ -16,13 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
-from blog.views import create_blog, list_blogs, delete_blog, update_blog, create_new_user, index_page, login_user,logout_user
+from blog.views import create_blog, list_blogs, delete_blog, update_blog, create_new_user, index_page, login_user,logout_user, BlogView, BlogList
 from apna_bazaar.views import add_product,show_products, show_product_detail, add_to_cart,remove_from_cart
 urlpatterns = [
     path('', index_page,name='index'),
     path('admin/', admin.site.urls),
-    path('blogs/create',csrf_exempt(create_blog),name='create_blog'),
-    path('blogs/list', list_blogs, name='list_blogs'),
+    path('blogs/create',BlogView.as_view(),name='create_blog'),
+    # path('blogs/create',csrf_exempt(create_blog),name='create_blog'),
+    # path('blogs/list', list_blogs, name='list_blogs'),
+    path('blogs/list', BlogList.as_view(), name='list_blogs'),
     path('blogs/<int:pk>/delete/', delete_blog, name='delete_blogs'),
     path('blogs/<int:pk>/edit/', update_blog,name='edit_blog'),
     

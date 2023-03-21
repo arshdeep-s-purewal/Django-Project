@@ -4,9 +4,10 @@ from blog.forms import BlogForm, CreateNewUserForm
 from blog.models import Blog
 from django.contrib.auth.models import User
 from django.contrib import messages
-from .forms import NewUserForm
+# from .forms import NewUserForm
 from django.contrib.auth import login,authenticate,logout
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required, permission_required 
+from django.views import View
 
 
 def index_page(request):
@@ -16,6 +17,7 @@ def index_page(request):
 def create_blog(request):
     form = BlogForm()
     if request.method == 'POST':
+        # import pdb;pdb.set_trace()
         form = BlogForm(request.POST)
         if form.is_valid():
             blog = form.save()
@@ -24,11 +26,29 @@ def create_blog(request):
             return redirect('/blogs/list')
     return render(request, 'create.html',{'form':form})
 
+class BlogView(View):
+    form = BlogForm()
+    def get(self,request):
+        form = BlogForm(request.POST)
+        return render(request, 'create.html', {'form':form})
+    
+    def post(self, request):
+        if request.user.is_authenticated and request.user.has_perm('blog.add_blog'):
+            form = BlogForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('list_blogs')
+            return render(request, 'create.html', {'form':form})
+
 
 def list_blogs(request):
     blog = Blog.objects.all()
     return render(request, 'list.html',{'blogs':blog})
     
+class BlogList(View):
+    def get(self, request):
+        blog = Blog.objects.all()
+        return render(request, 'list.html', {'blogs':blog})
 
 def delete_blog(request, **kwargs):
     error_message = ""
