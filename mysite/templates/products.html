@@ -1,6 +1,7 @@
 <div>
     {% for i in Products %}
         <h2>{{i.name}}</h2>
+        <img src="{{MEDIA_URL}}{{ i.product_image.url }}" class="img-responsive" style="width: 20%; float: left; margin-right: 10px;" />
         <a href="/apna_bazaar/{{i.id}}/detail_of_products">detail</details></a>
         <hr>
         

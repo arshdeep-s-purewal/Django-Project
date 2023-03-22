@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,HttpResponse
 from apna_bazaar.forms import ApnaBazaarForm, CreateNewUserForm
 from apna_bazaar.models import ApnaBazaar
 from mysite.core.cart_helper import add_item_to_cart, remove_item_from_cart
@@ -37,16 +37,25 @@ def logout_user(request):
     logout(request)
     return redirect("index")
 
-
+def home(request):
+    return render(request, 'home.html')
 
 
 def add_product(request):
     form = ApnaBazaarForm()
     if request.method == 'POST':
-        form = ApnaBazaarForm(request.POST)
-        form.save()
-
+        form = ApnaBazaarForm(request.POST, request.FILES)
+        print(request.POST)
+        if form.is_valid():
+            print("ss")
+            form.save()
+            return redirect('success')
+        else:
+            ApnaBazaarForm()
     return render(request, 'add_product.html', {'forms':form})
+
+def success(request):
+    return render(request, 'success.html')
 
 def show_products(request):
     products = ApnaBazaar.objects.all()
@@ -60,7 +69,14 @@ def show_product_detail(request, **kwargs):
     context = {'Product':product, 'name':name}
     return render(request, 'product_detail.html', context)
 
-
+# def display_hotel_images(request):
+ 
+#     if request.method == 'GET':
+ 
+#         # getting all the objects of hotel.
+#         Hotels = Hotel.objects.all()
+#         return render((request, 'display_hotel_images.html',
+#                        {'hotel_images': Hotels}))
 
 def add_to_cart(request, **kwargs):
     adc = add_item_to_cart(request, **kwargs)

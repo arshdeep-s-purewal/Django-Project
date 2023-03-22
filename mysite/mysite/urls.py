@@ -16,8 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
+from django.conf.urls.static import static
 from blog.views import create_blog, list_blogs, delete_blog, update_blog, create_new_user, index_page, login_user,logout_user, BlogView, BlogList
-from apna_bazaar.views import add_product,show_products, show_product_detail, add_to_cart,remove_from_cart,home_ecom,register_user,login_ecom
+from apna_bazaar.views import add_product,show_products, show_product_detail, add_to_cart,remove_from_cart,home_ecom,register_user,login_ecom,success,home
 urlpatterns = [
     # path('', index_page,name='index'),
     path('', home_ecom,name='index'),
@@ -28,7 +30,7 @@ urlpatterns = [
     path('blogs/list', BlogList.as_view(), name='list_blogs'),
     path('blogs/<int:pk>/delete/', delete_blog, name='delete_blogs'),
     path('blogs/<int:pk>/edit/', update_blog,name='edit_blog'),
-    path('apna_bazaar/add_product/', add_product),
+    path('apna_bazaar/add_product/', add_product, name='add_product_image'),
     path('apna_bazaar/show_products', show_products, name='show_products'),
     path('apna_bazaar/<int:pk>/detail_of_products', show_product_detail),
     path('apna_bazaar/<int:pk>/add_to_cart', add_to_cart),
@@ -38,4 +40,7 @@ urlpatterns = [
     path('blogs/logout', logout_user, name="logout"),
     path('apna_bazaar/register_user', register_user, name='register_ecom'),
     path('apna_bazaar/login_user', login_ecom, name='login_ecom'),
-]
+    path('success', success, name='success'),
+    path('apna_bazaar/homepage', home, name='homepage'),
+
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -3,13 +3,11 @@
     {% for item in request.session.cart %}
         {{item.name_of_product}} <br>
         {{item.Price}} <br>
+        <img src="{{ item.product_image.url }}" class="img-responsive" style="width: 100%; float: left; margin-right: 10px;" />
         <a href="/apna_bazaar/{{item.Id}}/remove_from_cart">Remove</a>
         <hr>
     {% endfor %}
 </div>
-
-
-{% block content %}
 
 <section class="h-100 gradient-custom">
     <div class="container py-5">
