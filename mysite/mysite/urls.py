@@ -19,7 +19,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.conf.urls.static import static
 from blog.views import create_blog, list_blogs, delete_blog, update_blog, create_new_user, index_page, login_user,logout_user, BlogView, BlogList
-from apna_bazaar.views import add_product,show_products, show_product_detail, add_to_cart,remove_from_cart,home_ecom,register_user,login_ecom,success,home
+from apna_bazaar.views import add_product,show_products, show_product_detail, add_to_cart,remove_from_cart,home_ecom,register_user,login_ecom,success,home,show_cart
 urlpatterns = [
     # path('', index_page,name='index'),
     path('', home_ecom,name='index'),
@@ -42,5 +42,6 @@ urlpatterns = [
     path('apna_bazaar/login_user', login_ecom, name='login_ecom'),
     path('success', success, name='success'),
     path('apna_bazaar/homepage', home, name='homepage'),
+    path('apna_bazaar/cart', show_cart, name='cart'),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

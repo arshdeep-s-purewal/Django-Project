@@ -91,7 +91,12 @@ def add_to_wishlist(request, **kwargs):
     if pk := kwargs.get('pk'):
         product = ApnaBazaar.objects.get(pk = pk)
         wishlist = request.session.get('wishlist',[])
-        item = {'name_of_product':product.name, 'Price':product.price, 'Id':product.pk}
+        item = {'name_of_product':product.name, 'Price':product.price, 'Id':product.pk, 'product_image':product.product_image}
         wishlist.append(item)
         request.session['wishlist'] = wishlist
     return render(request, 'wishlist.html')
+
+def show_cart(request, **kwargs):
+    # import pdb;pdb.set_trace()
+    cart = request.session['cart']
+    return render(request,'show_cart.html')
