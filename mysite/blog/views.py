@@ -12,7 +12,7 @@ from django.views import View
 
 def index_page(request):
      return render(request, 'index.html')
-   
+
 @permission_required('blog.add_blog',raise_exception=True)
 def create_blog(request):
     form = BlogForm()

@@ -4,6 +4,8 @@ from apna_bazaar.models import ApnaBazaar
 from mysite.core.cart_helper import add_item_to_cart, remove_item_from_cart
 from django.contrib.auth.models import User
 from django.contrib.auth import login,logout,authenticate
+from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required, permission_required
 # Create your views here.
 def home_ecom(request):
     return render(request,'home_ecom.html')
@@ -40,7 +42,7 @@ def logout_user(request):
 def home(request):
     return render(request, 'home.html')
 
-
+@permission_required('blog.add_blog',raise_exception=True)
 def add_product(request):
     form = ApnaBazaarForm()
     if request.method == 'POST':
@@ -57,9 +59,9 @@ def add_product(request):
 def success(request):
     return render(request, 'success.html')
 
-def show_products(request):
-    products = ApnaBazaar.objects.all()
-    return render(request, 'products.html', {'Products':products})
+# def show_products(request):
+#     products = ApnaBazaar.objects.all()
+#     return render(request, 'products.html', {'Products':products})
 
 def show_product_detail(request, **kwargs):
     context={}
@@ -69,14 +71,6 @@ def show_product_detail(request, **kwargs):
     context = {'Product':product, 'name':name}
     return render(request, 'product_detail.html', context)
 
-# def display_hotel_images(request):
- 
-#     if request.method == 'GET':
- 
-#         # getting all the objects of hotel.
-#         Hotels = Hotel.objects.all()
-#         return render((request, 'display_hotel_images.html',
-#                        {'hotel_images': Hotels}))
 
 def add_to_cart(request, **kwargs):
     adc = add_item_to_cart(request, **kwargs)
@@ -100,3 +94,10 @@ def show_cart(request, **kwargs):
     # import pdb;pdb.set_trace()
     cart = request.session['cart']
     return render(request,'show_cart.html')
+
+def listing(request):
+    product_list = ApnaBazaar.objects.all()
+    paginator = Paginator(product_list, 3) 
+    page_number = request.GET.get('page')
+    products = paginator.get_page(page_number)
+    return render(request, 'products.html', {'Products':products})

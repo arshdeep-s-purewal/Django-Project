@@ -1,6 +1,6 @@
 {% extends 'home_ecom.html'%}
 {% block content %}
-<div>
+<!-- <div>
     {{name}}
     <h2>{{Product.name}}</h2>
     <h2>Price:{{Product.price}}</h2>
@@ -11,7 +11,7 @@
     <a href='/apna_bazaar/{{Product.id}}/add_to_cart'>Add to cart</details></a>
     <hr>
 
-</div>
+</div> -->
 
 <main class="mt-5 pt-4">
     <div class="container mt-5">
@@ -55,10 +55,7 @@
                         <div class="form-outline me-1" style="width: 100px;">
                             <input type="number" value="1" class="form-control" />
                         </div>
-                        <button class="btn btn-primary ms-1" type="submit">
-                            Add to cart
-                            <i class="fas fa-shopping-cart ms-1"></i>
-                        </button>
+                        <a href='/apna_bazaar/{{Product.id}}/add_to_cart' class = "btn btn-primary">Add to cart</a>
                     </form>
                 </div>
                 <!--Content-->

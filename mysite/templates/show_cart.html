@@ -3,8 +3,12 @@
 
 <div>
     {% for item in request.session.cart %}
-    <h2>{{item.name}}</h2>
-    <img src="{{MEDIA_URL}}{{ item.product_image.url }}" class="img-responsive" style="width: 20%; float: left; margin-right: 10px;" />
+    <h2>{{item.name_of_product}}</h2>
+    <h2>{{item.Price}}</h2>
+    <img src="{{MEDIA_URL}}{{ item.product_image }}" class="img-fluid" alt="" />
+   
+
+    <!-- <img src="{{MEDIA_URL}}{{ item.product_image.url }}" class="img-responsive" style="width: 20%; float: left; margin-right: 10px;" /> -->
     <a href="/apna_bazaar/{{item.id}}/detail_of_products">detail</details></a>
     <hr>
     

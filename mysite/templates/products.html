@@ -1,4 +1,6 @@
-<div>
+{% extends 'home_ecom.html'%}
+{% block content %}
+<!-- <div>
     {% for i in Products %}
         <h2>{{i.name}}</h2>
         <img src="{{MEDIA_URL}}{{ i.product_image.url }}" class="img-responsive" style="width: 20%; float: left; margin-right: 10px;" />
@@ -6,4 +8,81 @@
         <hr>
         
     {% endfor %}
+</div> -->
+<div>
+    {% for i in Products %}
+    <section style="background-color: #eee;">
+        <div class="container py-5">
+          <div class="row justify-content-center mb-3">
+            <div class="col-md-12 col-xl-10">
+              <div class="card shadow-0 border rounded-3">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-12 col-lg-3 col-xl-3 mb-4 mb-lg-0">
+                      <div class="bg-image hover-zoom ripple rounded ripple-surface">
+                        <img src="{{i.product_image.url}}"
+                          class="w-100" />
+                        <a href="#!">
+                          <div class="hover-overlay">
+                            <div class="mask" style="background-color: rgba(253, 253, 253, 0.15);"></div>
+                          </div>
+                        </a>
+                      </div>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-xl-6">
+                      <h5>{{i.name}}</h5>
+                      <div class="d-flex flex-row">
+                        <div class="text-danger mb-1 me-2">
+                          <i class="fa fa-star"></i>
+                          <i class="fa fa-star"></i>
+                          <i class="fa fa-star"></i>
+                          <i class="fa fa-star"></i>
+                        </div>
+                        <!-- <span>310</span> -->
+                      </div>
+                      <p class="text-truncate mb-4 mb-md-0">
+                        {{i.product_description}}
+                      </p>
+                    </div>
+                    <div class="col-md-6 col-lg-3 col-xl-3 border-sm-start-none border-start">
+                      <div class="d-flex flex-row align-items-center mb-1">
+                        <h4 class="mb-1 me-1">{{i.price}}</h4>
+                        <!-- <span class="text-danger"><s>$20.99</s></span> -->
+                      </div>
+                      <h6 class="text-success">Free shipping</h6>
+                      <div class="d-flex flex-column mt-4">
+                        <!-- <button class="btn btn-primary btn-sm" type="button"> -->
+                        <a href="/apna_bazaar/{{i.id}}/detail_of_products" class = "btn btn-primary btn-sm">Details</a>
+                        <!-- </button> -->
+                        <button class="btn btn-outline-primary btn-sm mt-2" type="button">
+                          Add to wishlist
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      </section> 
+      {% endfor %}
 </div>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if Products.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ Products.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ Products.number }} of {{ Products.paginator.num_pages }}.
+        </span>
+
+        {% if Products.has_next %}
+            <a href="?page={{ Products.next_page_number }}">next</a>
+            <a href="?page={{ Products.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+{% endblock %}
