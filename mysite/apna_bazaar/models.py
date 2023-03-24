@@ -1,5 +1,5 @@
 from django.db import models
-from django.views.generic import ListView
+from django.contrib.auth.models import User
 # from myapp.models import Contact
 
 # Create your models here.
@@ -11,13 +11,10 @@ class ApnaBazaar(models.Model):
     category = models.CharField(max_length = 200)
     product_description = models.TextField(max_length= 2000)
 
-
-# class ContactListView(ListView):
-#     paginate_by = 2
-#     model = Contact
-
 class Wishlist(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(ApnaBazaar, on_delete=models.CASCADE)
+
+
+class Address(models.Model):
     pass
-
-
-    

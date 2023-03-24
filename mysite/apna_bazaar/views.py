@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,HttpResponse
 from apna_bazaar.forms import ApnaBazaarForm, CreateNewUserForm
-from apna_bazaar.models import ApnaBazaar
+from apna_bazaar.models import ApnaBazaar, Wishlist
 from mysite.core.cart_helper import add_item_to_cart, remove_item_from_cart
 from django.contrib.auth.models import User
 from django.contrib.auth import login,logout,authenticate
@@ -32,12 +32,12 @@ def login_ecom(request):
         print(user)
         if user is not None:
             login(request, user)
-            return redirect('index')
+            return redirect('homepage')
     return render(request,'login_ecom.html',{})
 
 def logout_user(request):
     logout(request)
-    return redirect("index")
+    return redirect("home_ecom")
 
 def home(request):
     return render(request, 'home.html')
@@ -64,15 +64,21 @@ def success(request):
 #     return render(request, 'products.html', {'Products':products})
 
 def show_product_detail(request, **kwargs):
-    context={}
+    # context={}
     if pk := kwargs.get('pk'):
-        name = request.session.get('name')
+        # name = request.session.get('name')
         product = ApnaBazaar.objects.get(pk = pk)
-    context = {'Product':product, 'name':name}
-    return render(request, 'product_detail.html', context)
+    # context = {'Product':product, 'name':name}
+
+    return render(request, 'product_detail.html', {'Product':product})
 
 
 def add_to_cart(request, **kwargs):
+    """
+    Step 1:- create add to cart form 
+    step 2:- save product in session
+    Step 3:- Redirect to cart page
+    """
     adc = add_item_to_cart(request, **kwargs)
     return render(request,'cart.html', {'name':adc})
     
@@ -81,23 +87,36 @@ def remove_from_cart(request, **kwargs):
     return render(request, 'cart.html', )
         
 
-def add_to_wishlist(request, **kwargs):
-    if pk := kwargs.get('pk'):
-        product = ApnaBazaar.objects.get(pk = pk)
-        wishlist = request.session.get('wishlist',[])
-        item = {'name_of_product':product.name, 'Price':product.price, 'Id':product.pk, 'product_image':product.product_image}
-        wishlist.append(item)
-        request.session['wishlist'] = wishlist
-    return render(request, 'wishlist.html')
+# def add_to_wishlist(request, **kwargs):
+#     if pk := kwargs.get('pk'):
+#         product = ApnaBazaar.objects.get(pk = pk)
+#         wishlist = request.session.get('wishlist',[])
+#         item = {'name_of_product':product.name, 'Price':product.price, 'Id':product.pk, 'product_image':product.product_image}
+#         wishlist.append(item)
+#         request.session['wishlist'] = wishlist
+#     return render(request, 'wishlist.html')
 
-def show_cart(request, **kwargs):
-    # import pdb;pdb.set_trace()
-    cart = request.session['cart']
-    return render(request,'show_cart.html')
+def show_cart(request):
+    return render(request,'cart.html')
 
-def listing(request):
+def show_products_listing(request):
     product_list = ApnaBazaar.objects.all()
     paginator = Paginator(product_list, 3) 
     page_number = request.GET.get('page')
     products = paginator.get_page(page_number)
     return render(request, 'products.html', {'Products':products})
+
+def add_to_wishlist(request, **kwargs):
+    # import pdb;pdb.set_trace()
+    if pk := kwargs.get('pk'):
+        product = ApnaBazaar.objects.get(pk = pk)
+        Wishlist.objects.create(product = product, user = request.user)
+    
+    return redirect('show_products')
+    
+def show_wishlist(request, ** kwargs):
+    wish_list = Wishlist.objects.filter(user = request.user)
+    return render(request, 'wishlist.html', {'wish_list':wish_list})
+
+def checkout(request):
+    pass
