@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,HttpResponse
 from apna_bazaar.forms import ApnaBazaarForm, CreateNewUserForm, AddAddressForm
-from apna_bazaar.models import ApnaBazaar, Wishlist, Address, Order
+from apna_bazaar.models import ApnaBazaar, Wishlist, Address, Order, OrderItem
 from mysite.core.cart_helper import add_item_to_cart, remove_item_from_cart
 from django.contrib.auth.models import User
 from django.contrib.auth import login,logout,authenticate
@@ -161,13 +161,17 @@ def userprofile(request):
     
 def ordered(request, **kwargs):
     # import pdb;pdb.set_trace()
+    shipping_address = Address.objects.filter(user = request.user)
+    total_price = 0
     for i in request.session['cart']:
-        print(i)
-        Order.objects.create(product_id = i['Id'], user = request.user)
+        total_price += int(i['Price'])*int(i['quantity'])
+        Order.objects.create(user = request.user, address = shipping_address, total =  total_price)
+        order = Order.objects.filter(user = request.user)
+        OrderItem.objects.create(order = order, product_id = i['Id'], price = i['Price'])
     return redirect('success')
 
 
-def update_password(request):
-    u = User.objects.get(username=request.user)
-    u.set_password('new password')
-    u.save()
+# def update_password(request):
+#     u = User.objects.get(username=request.user)
+#     u.set_password('new password')
+#     u.save()
