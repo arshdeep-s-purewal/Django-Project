@@ -19,7 +19,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.conf.urls.static import static
 from blog.views import create_blog, list_blogs, delete_blog, update_blog, create_new_user, index_page, login_user,logout_user, BlogView, BlogList
-from apna_bazaar.views import add_product,show_products_listing, show_product_detail, add_to_cart,remove_from_cart,home_ecom,register_user,login_ecom,success,home,show_cart, add_to_wishlist, show_wishlist, remove_from_wishlist, checkout, shipping_details, userprofile, ordered
+from apna_bazaar.views import add_product,show_products_listing, show_product_detail, add_to_cart,remove_from_cart,home_ecom,register_user,login_ecom, logout_user_ecom,success,home,show_cart, add_to_wishlist, show_wishlist, remove_from_wishlist, checkout, shipping_details, userprofile, ordered
 urlpatterns = [
     # path('', index_page,name='index'),
     path('', home_ecom,name='index'),
@@ -40,6 +40,7 @@ urlpatterns = [
     path('apna_bazaar/<int:pk>/remove_from_cart', remove_from_cart),
     path('apna_bazaar/register_user', register_user, name='register_ecom'),
     path('apna_bazaar/login_user', login_ecom, name='login_ecom'),
+    path('apna_bazaar/logout_user', logout_user_ecom, name='logout_ecom'),
     path('success', success, name='success'),
     path('apna_bazaar/homepage', home, name='homepage'),
     path('apna_bazaar/cart', show_cart, name='cart'),

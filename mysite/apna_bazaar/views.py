@@ -35,14 +35,16 @@ def login_ecom(request):
             return redirect('homepage')
     return render(request,'login_ecom.html',{})
 
-def logout_user(request):
+def logout_user_ecom(request):
+    # import pdb;pdb.set_trace()
+    del request.session['cart']
     logout(request)
-    return redirect("home_ecom")
+    return redirect("homepage")
 
 def home(request):
     return render(request, 'home.html')
 
-@permission_required('blog.add_blog',raise_exception=True)
+# @permission_required('blog.add_blog',raise_exception=True)
 def add_product(request):
     form = ApnaBazaarForm()
     if request.method == 'POST':
@@ -79,7 +81,10 @@ def add_to_cart(request, **kwargs):
     step 2:- save product in session
     Step 3:- Redirect to cart page
     """
-    adc = add_item_to_cart(request, **kwargs)
+    if request.user.is_authenticated:
+        adc = add_item_to_cart(request, **kwargs)
+    else:
+        redirect('login_ecom')
     return redirect('cart')
     # return render(request,'cart.html', {'name':adc})
     
@@ -87,7 +92,6 @@ def remove_from_cart(request, **kwargs):
     remove_item_from_cart(request, **kwargs)
     # return redirect('cart')        
     return render(request, 'cart.html', )
-        
 
 # def add_to_wishlist(request, **kwargs):
 #     if pk := kwargs.get('pk'):
@@ -143,8 +147,9 @@ def shipping_details(request):
 
 def checkout(request):
     # import pdb;pdb.set_trace()
+    total = 0
     for i in request.session['cart']:
-        total = i['Price']
+        total += int(i['Price'])*int(i['quantity'])
     address = Address.objects.filter(user = request.user)
     return render(request, 'checkout.html', {'address':address, 'total':total})
 
@@ -160,3 +165,9 @@ def ordered(request, **kwargs):
         print(i)
         Order.objects.create(product_id = i['Id'], user = request.user)
     return redirect('success')
+
+
+def update_password(request):
+    u = User.objects.get(username=request.user)
+    u.set_password('new password')
+    u.save()

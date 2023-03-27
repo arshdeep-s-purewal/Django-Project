@@ -17,16 +17,16 @@
                 <li class="list-group-item d-flex justify-content-between lh-condensed">
                     <div>
                         <h6 class="my-0">{{i.name_of_product}}</h6>
-                        <small class="text-muted">Brief description</small>
+                        <small class="text-muted">Quantity: {{i.quantity}}</small>
                     </div>
                     <span class="text-muted">{{i.Price}}</span>
                 </li>
-
+                {% endfor %}
                 <li class="col-md-8 order-md-1">    
                     <span>Total </span>
                     <strong>{{total}}</strong>
                 </li>
-                {% endfor %}
+               
             </ul>
             <form class="card p-2">
                 <div class="input-group">

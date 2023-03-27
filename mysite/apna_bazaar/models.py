@@ -29,4 +29,10 @@ class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     address = models.ForeignKey(Address, on_delete=models.CASCADE, null=True)
     ordered_at = models.DateTimeField(auto_now=True)
+    total = models.CharField(max_length=10000000)
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product = models.ForeignKey(ApnaBazaar, on_delete=models.CASCADE)
+    price = models.CharField(max_length=1000000)
 
