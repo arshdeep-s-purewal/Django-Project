@@ -1,16 +1,85 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wishlist</title>
-</head>
-<body>
-    <h1>Wishlist</h1>
-    {% for i in wish_list %}
+{% extends 'home_ecom.html'%} 
+{% block content %}
+{% comment %} <h1>Wishlist</h1>
+{% for i in wish_list %}
     {{i.product.name}}
-    {% endfor %}
-        <hr>
-</body>
-</html>
+    <hr>
+{% endfor %} {% endcomment %}
+
+<div>
+    {% for i in wish_list %}
+    <section style="background-color: #eee;">
+        <div class="container py-5">
+          <div class="row justify-content-center mb-3">
+            <div class="col-md-12 col-xl-10">
+              <div class="card shadow-0 border rounded-3">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-12 col-lg-3 col-xl-3 mb-4 mb-lg-0">
+                      <div class="bg-image hover-zoom ripple rounded ripple-surface">
+                        <img src="{{i.product.product_image.url}}"
+                          class="w-100" />
+                        <a href="#!">
+                          <div class="hover-overlay">
+                            <div class="mask" style="background-color: rgba(253, 253, 253, 0.15);"></div>
+                          </div>
+                        </a>
+                      </div>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-xl-6">
+                      <h5>{{i.product.name}}</h5>
+                      <div class="d-flex flex-row">
+                        <div class="text-danger mb-1 me-2">
+                          <i class="fa fa-star"></i>
+                          <i class="fa fa-star"></i>
+                          <i class="fa fa-star"></i>
+                          <i class="fa fa-star"></i>
+                        </div>
+                        <!-- <span>310</span> -->
+                      </div>
+                      <p class="text-truncate mb-4 mb-md-0">
+                        {{i.product.product_description}}
+                      </p>
+                    </div>
+                    <div class="col-md-6 col-lg-3 col-xl-3 border-sm-start-none border-start">
+                      <div class="d-flex flex-row align-items-center mb-1">
+                        <h4 class="mb-1 me-1">{{i.product.price}}</h4>
+                        <!-- <span class="text-danger"><s>$20.99</s></span> -->
+                      </div>
+                      <h6 class="text-success">Free shipping</h6>
+                      <div class="d-flex flex-column mt-4">
+                        <!-- <button class="btn btn-primary btn-sm" type="button"> -->
+                        <a href="/apna_bazaar/{{i.product.id}}/detail_of_products" class = "btn btn-primary btn-sm">Details</a>
+                        <!-- </button> -->
+                        <a href="/apna_bazaar/{{i.id}}/remove_wishlist" class="btn btn-outline-primary btn-sm mt-2">Remove from wishlist</a>
+                        
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      </section> 
+      {% endfor %}
+</div>
+
+{% comment %} <div class="pagination">
+    <span class="step-links">
+        {% if wish_list.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ wish_list.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ wish_list.number }} of {{ wish_list.paginator.num_pages }}.
+        </span>
+
+        {% if Products.has_next %}
+            <a href="?page={{ wish_list.next_page_number }}">next</a>
+            <a href="?page={{ wish_list.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div> {% endcomment %}
+{% endblock %}
+

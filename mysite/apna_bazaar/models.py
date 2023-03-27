@@ -17,4 +17,12 @@ class Wishlist(models.Model):
 
 
 class Address(models.Model):
-    pass
+    name = models.CharField(max_length=200)
+    mobile_no = models.IntegerField()
+    pin_code = models.IntegerField()
+    address = models.CharField(max_length=300)
+    locality = models.CharField(max_length=200)
+    city = models.CharField(max_length=100)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    
+

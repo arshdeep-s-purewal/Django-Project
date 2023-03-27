@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,HttpResponse
-from apna_bazaar.forms import ApnaBazaarForm, CreateNewUserForm
-from apna_bazaar.models import ApnaBazaar, Wishlist
+from apna_bazaar.forms import ApnaBazaarForm, CreateNewUserForm, AddAddressForm
+from apna_bazaar.models import ApnaBazaar, Wishlist, Address
 from mysite.core.cart_helper import add_item_to_cart, remove_item_from_cart
 from django.contrib.auth.models import User
 from django.contrib.auth import login,logout,authenticate
@@ -80,10 +80,12 @@ def add_to_cart(request, **kwargs):
     Step 3:- Redirect to cart page
     """
     adc = add_item_to_cart(request, **kwargs)
-    return render(request,'cart.html', {'name':adc})
+    return redirect('cart')
+    # return render(request,'cart.html', {'name':adc})
     
 def remove_from_cart(request, **kwargs):
-    remove_item_from_cart(request, **kwargs)        
+    remove_item_from_cart(request, **kwargs)
+    # return redirect('cart')        
     return render(request, 'cart.html', )
         
 
@@ -114,9 +116,40 @@ def add_to_wishlist(request, **kwargs):
     
     return redirect('show_products')
     
-def show_wishlist(request, ** kwargs):
+def show_wishlist(request):
     wish_list = Wishlist.objects.filter(user = request.user)
     return render(request, 'wishlist.html', {'wish_list':wish_list})
+ 
+def remove_from_wishlist(request, **kwargs):
+    # import pdb;pdb.set_trace()
+    if pk := kwargs.get('pk'):
+        product = Wishlist.objects.get(pk = pk)
+        product.delete()
+    return redirect('wishlist')
+
+def shipping_details(request):
+    form = AddAddressForm()
+    if request.method == 'POST':
+        form = AddAddressForm(request.POST)
+        print(request.POST)
+        if form.is_valid():
+            print("ss")
+            form.save()
+            return redirect('success')
+        else:
+            AddAddressForm()
+    # return render(request, 'add_product.html', {'forms':form})
+    return render(request, 'shipping_details_address.html', {'forms':form})
 
 def checkout(request):
-    pass
+    # import pdb;pdb.set_trace()
+    for i in request.session['cart']:
+        total = i['Price']
+    address = Address.objects.filter(user = request.user)
+    return render(request, 'checkout.html', {'address':address, 'total':total})
+
+def userprofile(request):
+    if request.user.is_authenticated:
+        return render(request, 'profile.html')
+    else:
+        return redirect('login_ecom')

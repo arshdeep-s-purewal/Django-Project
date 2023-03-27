@@ -19,7 +19,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.conf.urls.static import static
 from blog.views import create_blog, list_blogs, delete_blog, update_blog, create_new_user, index_page, login_user,logout_user, BlogView, BlogList
-from apna_bazaar.views import add_product,show_products_listing, show_product_detail, add_to_cart,remove_from_cart,home_ecom,register_user,login_ecom,success,home,show_cart, add_to_wishlist, show_wishlist
+from apna_bazaar.views import add_product,show_products_listing, show_product_detail, add_to_cart,remove_from_cart,home_ecom,register_user,login_ecom,success,home,show_cart, add_to_wishlist, show_wishlist, remove_from_wishlist, checkout, shipping_details, userprofile
 urlpatterns = [
     # path('', index_page,name='index'),
     path('', home_ecom,name='index'),
@@ -45,5 +45,10 @@ urlpatterns = [
     path('apna_bazaar/cart', show_cart, name='cart'),
     path('apna_bazaar/<int:pk>/add_to_wishlist', add_to_wishlist, name='add_to_wishlist'),
     path('apna_bazaar/wishlist', show_wishlist, name='wishlist'),
+    path('apna_bazaar/<int:pk>/remove_wishlist', remove_from_wishlist),
+    path('apna_bazaar/checkout', checkout, name='checkout'),
+    path('apna_bazaar/shipping_details', shipping_details, name='shipping_address'),
+    path('apna_bazaar/profile_page', userprofile, name='profile_page'),
+    
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
