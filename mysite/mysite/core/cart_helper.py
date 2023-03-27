@@ -4,9 +4,19 @@ def add_item_to_cart(request, **kwargs):
     if pk := kwargs.get('pk'):
         product = ApnaBazaar.objects.get(pk = pk)
         cart = request.session.get('cart',[])
-        # import pdb;pdb.set_trace()
-        item = {'name_of_product':product.name, 'Price':product.price, 'Id':product.pk, 'product_image':product.product_image.url}
-        cart.append(item)
+        # import pdb;pdb.set_trace() 
+        if cart == []:
+            item = {'name_of_product':product.name, 'Price':product.price, 'Id':product.pk, 'product_image':product.product_image.url, 'quantity':1}
+            cart.append(item)     
+        else:
+            for i in cart:
+                if i['Id'] == pk:
+                    i['quantity'] += 1
+                    break
+                else:
+                    item = {'name_of_product':product.name, 'Price':product.price, 'Id':product.pk, 'product_image':product.product_image.url, 'quantity':1}
+                    cart.append(item)
+                    break
         request.session['cart'] = cart
     return request.session['cart']
 

@@ -24,5 +24,9 @@ class Address(models.Model):
     locality = models.CharField(max_length=200)
     city = models.CharField(max_length=100)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    
+
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    address = models.ForeignKey(Address, on_delete=models.CASCADE, null=True)
+    ordered_at = models.DateTimeField(auto_now=True)
 

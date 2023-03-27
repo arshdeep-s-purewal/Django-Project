@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect,HttpResponse
 from apna_bazaar.forms import ApnaBazaarForm, CreateNewUserForm, AddAddressForm
-from apna_bazaar.models import ApnaBazaar, Wishlist, Address
+from apna_bazaar.models import ApnaBazaar, Wishlist, Address, Order
 from mysite.core.cart_helper import add_item_to_cart, remove_item_from_cart
 from django.contrib.auth.models import User
 from django.contrib.auth import login,logout,authenticate
@@ -153,3 +153,10 @@ def userprofile(request):
         return render(request, 'profile.html')
     else:
         return redirect('login_ecom')
+    
+def ordered(request, **kwargs):
+    # import pdb;pdb.set_trace()
+    for i in request.session['cart']:
+        print(i)
+        Order.objects.create(product_id = i['Id'], user = request.user)
+    return redirect('success')
