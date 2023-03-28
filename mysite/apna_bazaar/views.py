@@ -165,8 +165,9 @@ def ordered(request, **kwargs):
     total_price = 0
     for i in request.session['cart']:
         total_price += int(i['Price'])*int(i['quantity'])
-        Order.objects.create(user = request.user, address = shipping_address, total =  total_price)
-        order = Order.objects.filter(user = request.user)
+    Order.objects.create(user = request.user, address = shipping_address, total =  total_price)
+    order = Order.objects.filter(user = request.user)
+    for i in request.session['cart']:
         OrderItem.objects.create(order = order, product_id = i['Id'], price = i['Price'])
     return redirect('success')
 
