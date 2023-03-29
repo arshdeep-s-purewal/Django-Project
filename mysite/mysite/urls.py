@@ -19,7 +19,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.conf.urls.static import static
 from blog.views import create_blog, list_blogs, delete_blog, update_blog, create_new_user, index_page, login_user,logout_user, BlogView, BlogList
-from apna_bazaar.views import add_product,show_products_listing, show_product_detail, add_to_cart,remove_from_cart,home_ecom,register_user,login_ecom, logout_user_ecom,success,home,show_cart, add_to_wishlist, show_wishlist, remove_from_wishlist, checkout, shipping_details, userprofile, ordered
+from apna_bazaar.views import add_product,show_products_listing, show_product_detail, add_to_cart,remove_from_cart,home_ecom,register_user,login_ecom, logout_user_ecom,success,home,show_cart, add_to_wishlist, show_wishlist, remove_from_wishlist, checkout, shipping_details, userprofile, ordered, add_product_view, show_products, update_product_view, partial_update, add_new_address, show_address
 urlpatterns = [
     # path('', index_page,name='index'),
     path('', home_ecom,name='index'),
@@ -51,6 +51,12 @@ urlpatterns = [
     path('apna_bazaar/shipping_details', shipping_details, name='shipping_address'),
     path('apna_bazaar/profile_page', userprofile, name='profile_page'),
     path('apna_bazaar/order_placed', ordered, name='ordered'),
+    path('apna_bazaar/create', add_product_view),
+    path('apna_bazaar/show_products_postman', show_products),
+    path('apna_bazaar/update/<int:pk>', update_product_view),
+    path('apna_bazaar/partial_update/<int:pk>', partial_update),
+    path('apna_bazaar/add_Address', add_new_address),
+    path('apna_bazaar/show_Address', show_address),
     
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

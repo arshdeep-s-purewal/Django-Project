@@ -6,6 +6,10 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login,logout,authenticate
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required, permission_required
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from rest_framework.serializers import ModelSerializer
+
 # Create your views here.
 def home_ecom(request):
     return render(request,'home_ecom.html')
@@ -43,6 +47,67 @@ def logout_user_ecom(request):
 
 def home(request):
     return render(request, 'home.html')
+
+class ProductSerializer(ModelSerializer):
+    class Meta:
+        model = ApnaBazaar
+        fields = '__all__'
+
+@api_view()
+def show_products(request):
+    product_list = ApnaBazaar.objects.all()
+    return Response({"Product_list": ProductSerializer(product_list, many = True).data})
+
+@api_view(http_method_names=('post',))
+def add_product_view(request):
+    # import pdb; pdb.set_trace()
+    serializer = ProductSerializer(data = request.data)
+    serializer.is_valid()
+    serializer.save()
+    return Response({"data":serializer.data})
+
+
+@api_view(http_method_names=('put',))
+def update_product_view(request, pk):
+    # import pdb; pdb.set_trace()
+    product = ApnaBazaar.objects.get(id=pk)
+    serializer = ProductSerializer(product,data = request.data,)
+    serializer.is_valid()
+    serializer.save()
+    return Response({"message":serializer.data})
+
+@api_view(http_method_names = ('patch',))
+def partial_update(request, pk):
+    prodcut = ApnaBazaar.objects.get(id = pk)
+    serializer = ProductSerializer(prodcut, data = request.data, partial = True)
+    serializer.is_valid()
+    serializer.save()
+    return Response({"updated_data":serializer.data})
+
+class AddressSerializer(ModelSerializer):
+    class Meta:
+        model = Address
+        fields = '__all__'
+
+@api_view()
+def show_address(request):
+    addr = Address.objects.all()
+    address = AddressSerializer(addr, many = True)
+    return Response({'data':address.data})
+
+@api_view(http_method_names=('post',))
+def add_new_address(request):
+    serializer = AddressSerializer(data = request.data)
+    serializer.is_valid()
+    serializer.save()
+    return Response({'data':serializer.data})
+
+# @api_view(http_method_names=('post',)):
+# def update_address_put(request, user_id, address_id):
+#     addr = AddressSerializer.objects.get()
+#     pass
+
+
 
 # @permission_required('blog.add_blog',raise_exception=True)
 def add_product(request):
