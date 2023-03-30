@@ -7,8 +7,11 @@ from django.contrib.auth import login,logout,authenticate
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required, permission_required
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.serializers import ModelSerializer
+from rest_framework.authtoken.models import Token
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
 
 # Create your views here.
 def home_ecom(request):
@@ -48,6 +51,33 @@ def logout_user_ecom(request):
 def home(request):
     return render(request, 'home.html')
 
+class UserSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'password']
+
+
+@api_view(http_method_names=('post',))
+def login_user_view(request):
+    # import pdb;pdb.set_trace()
+    username = request.data['username']
+    password = request.data['password']
+    user = authenticate(username=username,password=password)
+    login(request, user)
+    u = User.objects.get(username = username)
+    token = Token.objects.create(user = u)
+    # print(token)
+    serializer = UserSerializer(user)
+    return Response({"data":serializer.data, "Token":token.key,})
+
+@api_view(http_method_names=('post',))
+@permission_classes([IsAuthenticated])
+def logout_api(request):
+    # import pdb;pdb.set_trace()
+    request.user.auth_token.delete()
+    logout(request)
+    return Response({"data":"Logout Successful"})
+
 class ProductSerializer(ModelSerializer):
     class Meta:
         model = ApnaBazaar
@@ -84,30 +114,65 @@ def partial_update(request, pk):
     serializer.save()
     return Response({"updated_data":serializer.data})
 
+@api_view(http_method_names=('delete',))
+def delete_product(request,pk):
+    prod = ApnaBazaar.objects.get(id=pk)
+    prod.delete()
+    return Response({"message":"product_deleted"})
+
 class AddressSerializer(ModelSerializer):
     class Meta:
         model = Address
         fields = '__all__'
 
 @api_view()
+@permission_classes([IsAuthenticated])
 def show_address(request):
     addr = Address.objects.all()
     address = AddressSerializer(addr, many = True)
     return Response({'data':address.data})
 
 @api_view(http_method_names=('post',))
+@permission_classes([IsAuthenticated])
 def add_new_address(request):
+    # import pdb;pdb.set_trace()
+    request.data['user'] = request.user.id
     serializer = AddressSerializer(data = request.data)
     serializer.is_valid()
     serializer.save()
     return Response({'data':serializer.data})
 
-# @api_view(http_method_names=('post',)):
+# @api_view(http_method_names=('post',))
 # def update_address_put(request, user_id, address_id):
 #     addr = AddressSerializer.objects.get()
 #     pass
 
+@api_view(http_method_names=('put',))
+@permission_classes([IsAuthenticated])
+def update_address_view(request, pk):
+    try:
+        request.data['user'] = request.user.id
+        address = Address.objects.get(id=pk, user=request.user.id)
+        serializer = AddressSerializer(address, data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+    except:
+        return  Response({'Message':' Address Not Found!'}, status=status.HTTP_400_BAD_REQUEST)
+    return Response({'Address':serializer.data}, status=status.HTTP_200_OK)
 
+@api_view(http_method_names=('patch',))
+@permission_classes([IsAuthenticated])
+def partial_update_address_view(request, pk):
+    try:
+        request.data['user'] = request.user.id
+        address = Address.objects.get(id=pk, user_id = request.user.id)
+        print(address)
+        serializer = AddressSerializer(address, data = request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+    except:
+        return  Response({'Message':' Address Not Found!'})
+    return Response({'Address':serializer.data}, status=status.HTTP_200_OK)
 
 # @permission_required('blog.add_blog',raise_exception=True)
 def add_product(request):
