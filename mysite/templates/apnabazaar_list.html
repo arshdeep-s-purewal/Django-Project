@@ -1,7 +1,8 @@
 {% extends 'home_ecom.html'%}
 {% block content %}
 <!-- <div>
-    {% for i in Products %}
+    {{count}}
+    {% for i in object_list %}
         <h2>{{i.name}}</h2>
         <img src="{{MEDIA_URL}}{{ i.product_image.url }}" class="img-responsive" style="width: 20%; float: left; margin-right: 10px;" />
         <a href="/apna_bazaar/{{i.id}}/detail_of_products">detail</details></a>
@@ -10,7 +11,8 @@
     {% endfor %}
 </div> -->
 <div>
-    {% for i in Products %}
+  <H1>No. of products:-- {{count}}</H1>
+    {% for i in object_list %}
     <section style="background-color: #eee;">
         <div class="container py-5">
           <div class="row justify-content-center mb-3">
@@ -69,18 +71,18 @@
 
 <div class="pagination">
     <span class="step-links">
-        {% if Products.has_previous %}
+        {% if page_obj.has_previous %}
             <a href="?page=1">&laquo; first</a>
-            <a href="?page={{ Products.previous_page_number }}">previous</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
         {% endif %}
 
         <span class="current">
-            Page {{ Products.number }} of {{ Products.paginator.num_pages }}.
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
         </span>
 
-        {% if Products.has_next %}
-            <a href="?page={{ Products.next_page_number }}">next</a>
-            <a href="?page={{ Products.paginator.num_pages }}">last &raquo;</a>
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
         {% endif %}
     </span>
 </div>

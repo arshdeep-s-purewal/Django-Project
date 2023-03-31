@@ -18,8 +18,9 @@ from django.urls import path
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.conf.urls.static import static
+from apna_bazaar.models import ApnaBazaar
 from blog.views import create_blog, list_blogs, delete_blog, update_blog, create_new_user, index_page, login_user,logout_user, BlogView, BlogList
-from apna_bazaar.views import add_product,show_products_listing, show_product_detail, add_to_cart,remove_from_cart,home_ecom,register_user,login_ecom, logout_user_ecom,success,home,show_cart, add_to_wishlist, show_wishlist, remove_from_wishlist, checkout, shipping_details, userprofile, ordered, add_product_view, show_products, update_product_view, partial_update, add_new_address, show_address, delete_product, login_user_view, logout_api, update_address_view, partial_update_address_view
+from apna_bazaar.views import add_product,show_products_listing, show_product_detail, add_to_cart,remove_from_cart,home_ecom,register_user,login_ecom, logout_user_ecom,success,home,show_cart, add_to_wishlist, show_wishlist, remove_from_wishlist, checkout, shipping_details, userprofile, ordered, add_product_view, show_products, update_product_view, partial_update, add_new_address, show_address, delete_product, login_user_view, logout_api, update_address_view, partial_update_address_view, ProductListView, ProductDetailView, ProductCreateView
 urlpatterns = [
     # path('', index_page,name='index'),
     path('', home_ecom,name='index'),
@@ -33,9 +34,10 @@ urlpatterns = [
     path('blogs/create_new_user', create_new_user,name='create_new_user'),
     path('blogs/login', login_user, name="login"),
     path('blogs/logout', logout_user, name="logout"),
-    path('apna_bazaar/add_product/', add_product, name='add_product_image'),
-    path('apna_bazaar/show_products', show_products_listing, name='show_products'),
-    path('apna_bazaar/<int:pk>/detail_of_products', show_product_detail, name= 'detail_of_products'),
+    # path('apna_bazaar/add_product/', add_product, name='add_product_image'),
+    path('apna_bazaar/add_product/', ProductCreateView.as_view(model=ApnaBazaar), name='add_product_image'),
+    path('apna_bazaar/show_products', ProductListView.as_view(), name='show_products'),
+    path('apna_bazaar/<int:pk>/detail_of_products', ProductDetailView.as_view(), name= 'detail_of_products'),
     path('apna_bazaar/<int:pk>/add_to_cart', add_to_cart),
     path('apna_bazaar/<int:pk>/remove_from_cart', remove_from_cart),
     path('apna_bazaar/register_user', register_user, name='register_ecom'),

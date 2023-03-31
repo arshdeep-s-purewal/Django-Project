@@ -13,6 +13,57 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 
+
+#class based views
+from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import FormView, CreateView, UpdateView
+
+class ProductCreateView(CreateView):
+    model = ApnaBazaar
+    fields = '__all__'
+    template_name = 'add_product.html'
+    success_url="/success"
+
+
+
+def add_product(request):
+    form = ApnaBazaarForm()
+    if request.method == 'POST':
+        form = ApnaBazaarForm(request.POST, request.FILES)
+        print(request.POST)
+        if form.is_valid():
+            print("ss")
+            form.save()
+            return redirect('success')
+        else:
+            ApnaBazaarForm()
+    return render(request, 'add_product.html', {'forms':form})
+
+
+
+class ProductListView(ListView):
+    model = ApnaBazaar
+    template_name = 'apnabazaar_list.html'
+    paginate_by = 3
+
+    def get_context_data(self,**kwargs):
+        context = super(ProductListView,self).get_context_data(**kwargs)
+        context['count'] = ApnaBazaar.objects.count()
+        return context
+
+class ProductDetailView(DetailView):
+    model =ApnaBazaar
+    # template_name = 'apnabazaar_detail.html'
+    context_object_name = 'Product'
+
+
+def show_product_detail(request, **kwargs):
+    # context={}
+    if pk := kwargs.get('pk'):
+        # name = request.session.get('name')
+        product = ApnaBazaar.objects.get(pk = pk)
+
 # Create your views here.
 def home_ecom(request):
     return render(request,'home_ecom.html')
@@ -195,14 +246,22 @@ def success(request):
 #     products = ApnaBazaar.objects.all()
 #     return render(request, 'products.html', {'Products':products})
 
-def show_product_detail(request, **kwargs):
-    # context={}
-    if pk := kwargs.get('pk'):
-        # name = request.session.get('name')
-        product = ApnaBazaar.objects.get(pk = pk)
-    # context = {'Product':product, 'name':name}
 
-    return render(request, 'product_detail.html', {'Product':product})
+# def show_products_listing(request):
+#     product_list = ApnaBazaar.objects.all()
+#     paginator = Paginator(product_list, 3) 
+#     page_number = request.GET.get('page')
+#     products = paginator.get_page(page_number)
+#     return render(request, 'products.html', {'Products':products})
+
+# def show_product_detail(request, **kwargs):
+#     # context={}
+#     if pk := kwargs.get('pk'):
+#         # name = request.session.get('name')
+#         product = ApnaBazaar.objects.get(pk = pk)
+#     # context = {'Product':product, 'name':name}
+
+#     return render(request, 'product_detail.html', {'Product':product})
 
 
 def add_to_cart(request, **kwargs):

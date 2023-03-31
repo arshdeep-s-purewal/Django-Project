@@ -1,8 +1,12 @@
 {% extends 'home_ecom.html'%}
 {% block content %}
-<form action="" method="POST" enctype="multipart/form-data">
+<form action="" method="post" enctype="multipart/form-data">
     {%csrf_token%}
-    {{forms.as_p}}
-    <input type="submit", name="Submit">
+    {{form.as_div}}
+    <input type="submit" name = 'submit'>
 </form>
 {% endblock %}
+
+
+
+
