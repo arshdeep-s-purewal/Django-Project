@@ -104,3 +104,53 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     return redirect("index")
+
+
+
+
+
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView
+from rest_framework.serializers import ModelSerializer
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework import serializers
+
+class UserSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'
+
+    full_name = serializers.SerializerMethodField()
+
+    def get_full_name(self, name):
+        fl_name = name.first_name + " " +name.last_name
+        return fl_name
+
+class UserListAPIView(ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+
+class BlogSerializer(ModelSerializer):
+    class Meta:
+        model = Blog
+        fields = '__all__'
+
+
+class CreateBlogView(CreateAPIView):
+    serializer_class = BlogSerializer
+    def create(self, request, *args, **kwargs):
+        response =  super().create(request, *args, **kwargs)
+        response.data = {"message":"Blog Created Successfully"}
+        return response  
+    
+class BlogListAPIView(ListAPIView):
+    queryset = Blog.objects.filter(is_published=True)
+    serializer_class = BlogSerializer
+
+class BlogRetrieveAPIView(RetrieveAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializer
+    
+

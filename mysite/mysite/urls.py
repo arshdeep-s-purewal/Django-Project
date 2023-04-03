@@ -19,16 +19,19 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.conf.urls.static import static
 from apna_bazaar.models import ApnaBazaar
-from blog.views import create_blog, list_blogs, delete_blog, update_blog, create_new_user, index_page, login_user,logout_user, BlogView, BlogList
+from blog.views import create_blog, list_blogs, delete_blog, update_blog, create_new_user, index_page, login_user,logout_user, BlogView, BlogList, CreateBlogView, BlogListAPIView, BlogRetrieveAPIView, UserListAPIView
 from apna_bazaar.views import add_product,show_products_listing, show_product_detail, add_to_cart,remove_from_cart,home_ecom,register_user,login_ecom, logout_user_ecom,success,home,show_cart, add_to_wishlist, show_wishlist, remove_from_wishlist, checkout, shipping_details, userprofile, ordered, add_product_view, show_products, update_product_view, partial_update, add_new_address, show_address, delete_product, login_user_view, logout_api, update_address_view, partial_update_address_view, ProductListView, ProductDetailView, ProductCreateView
 urlpatterns = [
     # path('', index_page,name='index'),
     path('', home_ecom,name='index'),
     path('admin/', admin.site.urls),
-    path('blogs/create',BlogView.as_view(),name='create_blog'),
+    path('user', UserListAPIView.as_view(), name='list_users'),
+    path('blogs',CreateBlogView.as_view(),name='create_blog'),
+    path('blogs/list', BlogListAPIView.as_view(), name='list_blogs'),
+    path('blogs/retrieve/<int:pk>', BlogRetrieveAPIView.as_view(), name='retrieve_blogs'),
+    # path('blogs/create',BlogView.as_view(),name='create_blog'),
     # path('blogs/create',csrf_exempt(create_blog),name='create_blog'),
     # path('blogs/list', list_blogs, name='list_blogs'),
-    path('blogs/list', BlogList.as_view(), name='list_blogs'),
     path('blogs/<int:pk>/delete/', delete_blog, name='delete_blogs'),
     path('blogs/<int:pk>/edit/', update_blog,name='edit_blog'),
     path('blogs/create_new_user', create_new_user,name='create_new_user'),
