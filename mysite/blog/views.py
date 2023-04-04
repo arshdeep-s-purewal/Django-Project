@@ -114,6 +114,8 @@ from rest_framework.serializers import ModelSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import serializers
+from rest_framework import viewsets
+from django_filters.rest_framework import DjangoFilterBackend, FilterSet, CharFilter
 
 class UserSerializer(ModelSerializer):
     class Meta:
@@ -130,6 +132,7 @@ class UserListAPIView(ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+###Blog Serializer---------------------------------------------------------------------------------
 
 
 class BlogSerializer(ModelSerializer):
@@ -154,3 +157,23 @@ class BlogRetrieveAPIView(RetrieveAPIView):
     serializer_class = BlogSerializer
     
 
+#---------------------------VIEWSET---------------------------
+class BlogFilterSet(FilterSet):
+    title = CharFilter(lookup_expr='contains')
+
+    class Meta:
+        model = Blog
+        fields = ['title']
+
+class BlogViewSet(viewsets.ModelViewSet):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = BlogFilterSet
+    # filterset_fields = ['title']
+
+    # def create(self, request, *args, **kwargs):
+    #     response =  super().create(request, *args, **kwargs)
+    #     response.data = {"message":"Blog Created Successfully"}
+    #     return response  
+    
